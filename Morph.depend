@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1352480898 source:/home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/main.cpp
+	"include/Game.h"
+
+1352480877 /home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/include/Game.h
+
+1352480624 source:/home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/src/Level.cpp
+	"../include/Level.h"
+
+1352480524 /home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/include/Level.h
+
+1352480624 source:/home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/src/Player.cpp
+	"../include/Player.h"
+
+1352480514 /home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/include/Player.h
+
+1352482179 source:/home/kaashif/Dropbox/Programming/proj/GitRepos/Morph/src/Game.cpp
+	<irrlicht/irrlicht.h>
+	"../include/Game.h"
+	"../include/Player.h"
+	"../include/Level.h"
+
