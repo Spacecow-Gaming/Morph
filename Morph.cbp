@@ -16,11 +16,6 @@
 					<Add directory="/home/kaashif/irrlicht/include" />
 				</Compiler>
 				<Linker>
-					<Add library="Irrlicht" />
-					<Add library="GL" />
-					<Add library="Xxf86vm" />
-					<Add library="Xext" />
-					<Add library="X11" />
 					<Add directory="/usr/X11R6/lib$(LIBSELECT)" />
 					<Add directory="/home/kaashif/irrlicht/lib/Linux" />
 				</Linker>
@@ -42,6 +37,14 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Linker>
+			<Add option="`sdl-config --libs`" />
+			<Add library="Irrlicht" />
+			<Add library="GL" />
+			<Add library="Xxf86vm" />
+			<Add library="Xext" />
+			<Add library="X11" />
+		</Linker>
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Level.h" />
 		<Unit filename="include/Player.h" />
