@@ -14,19 +14,18 @@ const int FRAMES_PER_SECOND = 20;
 
 //The dimensions of the level
 const int LEVEL_WIDTH = 1280;
-const int LEVEL_HEIGHT = 960;
+const int LEVEL_HEIGHT = 1280;
 
 //Tile constants
 const int TILE_WIDTH = 80;
 const int TILE_HEIGHT = 80;
-const int TOTAL_TILES = 192;
+const int TOTAL_TILES = 256;
 const int TILE_SPRITES = 12;
 
 //Tile floor and wall sprites
 const int TILE_FLOOR = 0;
 const int TILE_HEIGHT_1 = 1;
 const int TILE_HEIGHT_2 = 2;
-
 const int TILE_CENTER = 3;
 const int TILE_RAMP_TOP = 4;
 const int TILE_TOPRIGHT = 5;
@@ -404,50 +403,34 @@ void clip_tiles()
     clips[ TILE_HEIGHT_2 ].w = TILE_WIDTH;
     clips[ TILE_HEIGHT_2 ].h = TILE_HEIGHT;
 
-    clips[ TILE_TOPLEFT ].x = 80;
-    clips[ TILE_TOPLEFT ].y = 0;
-    clips[ TILE_TOPLEFT ].w = TILE_WIDTH;
-    clips[ TILE_TOPLEFT ].h = TILE_HEIGHT;
+
 
     clips[ TILE_RAMP_LEFT ].x = 80;
     clips[ TILE_RAMP_LEFT ].y = 80;
     clips[ TILE_RAMP_LEFT ].w = TILE_WIDTH;
     clips[ TILE_RAMP_LEFT ].h = TILE_HEIGHT;
 
-    clips[ TILE_BOTTOMLEFT ].x = 80;
-    clips[ TILE_BOTTOMLEFT ].y = 160;
-    clips[ TILE_BOTTOMLEFT ].w = TILE_WIDTH;
-    clips[ TILE_BOTTOMLEFT ].h = TILE_HEIGHT;
+
 
     clips[ TILE_RAMP_TOP ].x = 160;
     clips[ TILE_RAMP_TOP ].y = 0;
     clips[ TILE_RAMP_TOP ].w = TILE_WIDTH;
     clips[ TILE_RAMP_TOP ].h = TILE_HEIGHT;
 
-    clips[ TILE_CENTER ].x = 160;
-    clips[ TILE_CENTER ].y = 80;
-    clips[ TILE_CENTER ].w = TILE_WIDTH;
-    clips[ TILE_CENTER ].h = TILE_HEIGHT;
+
 
     clips[ TILE_RAMP_BOTTOM ].x = 160;
     clips[ TILE_RAMP_BOTTOM ].y = 160;
     clips[ TILE_RAMP_BOTTOM ].w = TILE_WIDTH;
     clips[ TILE_RAMP_BOTTOM ].h = TILE_HEIGHT;
 
-    clips[ TILE_TOPRIGHT ].x = 240;
-    clips[ TILE_TOPRIGHT ].y = 0;
-    clips[ TILE_TOPRIGHT ].w = TILE_WIDTH;
-    clips[ TILE_TOPRIGHT ].h = TILE_HEIGHT;
 
     clips[ TILE_RAMP_RIGHT ].x = 240;
     clips[ TILE_RAMP_RIGHT ].y = 80;
     clips[ TILE_RAMP_RIGHT ].w = TILE_WIDTH;
     clips[ TILE_RAMP_RIGHT ].h = TILE_HEIGHT;
 
-    clips[ TILE_BOTTOMRIGHT ].x = 240;
-    clips[ TILE_BOTTOMRIGHT ].y = 160;
-    clips[ TILE_BOTTOMRIGHT ].w = TILE_WIDTH;
-    clips[ TILE_BOTTOMRIGHT ].h = TILE_HEIGHT;
+
 }
 
 bool set_tiles( Tile *tiles[] )
@@ -456,10 +439,10 @@ bool set_tiles( Tile *tiles[] )
     int x = 0, y = 0;
 
     //Open the map
-    std::ifstream map( "test.map" );
+    std::ifstream lvl( "../levels/test.lvl" );
 
     //If the map couldn't be loaded
-    if( map == NULL )
+    if( lvl == NULL )
     {
         //Initialize the tiles
         for( int t = 0; t < TOTAL_TILES; t++ )
@@ -490,13 +473,13 @@ bool set_tiles( Tile *tiles[] )
             int tileType = -1;
 
             //Read tile from map file
-            map >> tileType;
+            lvl >> tileType;
 
             //If there was a problem in reading the map
-            if( map.fail() == true )
+            if( lvl.fail() == true )
             {
                 //Stop loading map
-                map.close();
+                lvl.close();
                 return false;
             }
 
@@ -509,7 +492,7 @@ bool set_tiles( Tile *tiles[] )
             else
             {
                 //Stop loading map
-                map.close();
+                lvl.close();
                 return false;
             }
 
@@ -528,7 +511,7 @@ bool set_tiles( Tile *tiles[] )
         }
 
         //Close the file
-        map.close();
+        lvl.close();
     }
 
     return true;
@@ -537,17 +520,17 @@ bool set_tiles( Tile *tiles[] )
 void save_tiles( Tile *tiles[] )
 {
     //Open the map
-    std::ofstream map( "test.map" );
+    std::ofstream lvl( "../levels/test.map" );
 
     //Go through the tiles
     for( int t = 0; t < TOTAL_TILES; t++ )
     {
         //Write tile type to file
-        map << tiles[ t ]->get_type() << " ";
+        lvl << tiles[ t ]->get_type() << " ";
     }
 
     //Close the file
-    map.close();
+    lvl.close();
 }
 
 Tile::Tile( int x, int y, int tileType )

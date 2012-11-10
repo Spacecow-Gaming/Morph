@@ -3,14 +3,14 @@
 #include "../include/Game.h"
 #include "../include/Player.h"
 #include "../include/Level.h"
+#include "../include/EventReceiver.h"
 
 Game::Game()
 {
     //ctor
 }
 
-//Starts game
-bool Game::StartGame()
+void Game::StartGame()
 {
     using namespace irr;
 
@@ -21,7 +21,7 @@ bool Game::StartGame()
                                           false, false, false, 0);              //Sets Vsync and some other things to false
 
     //Sets window caption to a double-wide char[]
-    device->setWindowCaption(L"Hello World! - Irrlicht Engine Demo");
+    device->setWindowCaption(L"Morph");
 
     //Creates pointers to device's members
     video::IVideoDriver* driver = device->getVideoDriver();
@@ -29,30 +29,33 @@ bool Game::StartGame()
     gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
 
     //Adds text to the GUI
-    guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",  //Sets text to double-wide char[]
+    guienv->addStaticText(L"This is Morph",  //Sets text to double-wide char[]
                           core::rect<s32>(10,10,260,22),                            //Sets size of text box
                           false);                                                   //Sets the visibility of the box outline
 
-    scene::IAnimatedMesh* mesh = smgr->getMesh("media/sydney.md2");
-    if (!mesh)
-    {
-        device->drop();
-        return 1;
-    }
-    scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode( mesh );
+    //Adds camera and points it at the origin
+    scene::ICameraSceneNode* camera = smgr->addCameraSceneNodeFPS();
+
+    //Hides cursor
+    device->getCursorControl()->setVisible(false);
+
+    //Creates evet receiver and attaches to device
+    EventReceiver receiver(device);
+    device->setEventReceiver(&receiver);
+
+    Level level;
+    level.LoadLevel();
+    level.DrawLevel(smgr);
+
+    camera->setPosition(core::vector3df(0.f,50.f,50.f));
+    camera->setTarget(core::vector3df(0.f,0.f,0.f));
 
 
-    if (node)
-    {
-        node->setMaterialFlag(video::EMF_LIGHTING, false);
-        node->setMD2Animation(scene::EMAT_STAND);
-        node->setMaterialTexture( 0, driver->getTexture("media/sydney.bmp") );
-    }
-    smgr->addCameraSceneNode(0, core::vector3df(0,30,-40), core::vector3df(0,5,0));
+    //Render loop
     while(device->run())
     {
-        driver->beginScene(true, true, video::SColor(255,255,255,255));
-
+        //Sets scene default colour to a dark grey
+        driver->beginScene(true, true, video::SColor(255,90,90,90));
         smgr->drawAll();
         guienv->drawAll();
 

@@ -4,12 +4,12 @@
 
 class Game
 {
-    public:
-        Game();
-        bool StartGame();
-        virtual ~Game();
-    protected:
-    private:
+public:
+    Game();
+    void StartGame();
+    virtual ~Game();
+protected:
+private:
 };
 
 #endif // GAME_H
