@@ -75,15 +75,14 @@ void Level::DrawLevel(irr::scene::ISceneManager* smgr)
 {
     irr::scene::ISceneNode* node;
 
-    for(int i=0; i<16; i++)
+    for(int i=0; i<256; i++)
     {
-        for(int t=0; t<16; t++)
-        {
-            std::cout <<std::endl<<"drawing tile:"<<i*t;
+
+            std::cout <<std::endl<<"drawing tile:"<<i;
             node = smgr->addCubeSceneNode();
-            node->setPosition(irr::core::vector3df((float)i*10.f, 0.f, (float)t*10.f));
+            node->setPosition(tiles[i]->position);
             node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-        }
+
 
     }
 }

@@ -520,7 +520,7 @@ bool set_tiles( Tile *tiles[] )
 void save_tiles( Tile *tiles[] )
 {
     //Open the map
-    std::ofstream lvl( "../levels/test.map" );
+    std::ofstream lvl( "../levels/test.lvl" );
 
     //Go through the tiles
     for( int t = 0; t < TOTAL_TILES; t++ )
