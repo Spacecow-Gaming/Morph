@@ -456,7 +456,7 @@ bool set_tiles( Tile *tiles[] )
     int x = 0, y = 0;
 
     //Open the map
-    std::ifstream map( "lazy.map" );
+    std::ifstream map( "test.map" );
 
     //If the map couldn't be loaded
     if( map == NULL )
