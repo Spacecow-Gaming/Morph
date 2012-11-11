@@ -4,12 +4,12 @@
 Level::Level()
 {
     //The dimensions of the level
-    LEVEL_WIDTH = 1280;
-    LEVEL_HEIGHT = 1280;
+    LEVEL_WIDTH = 160;
+    LEVEL_LENGTH = 160;
 
     //Tile constants
-    TILE_WIDTH = 80;
-    TILE_HEIGHT = 80;
+    TILE_WIDTH = 10;
+    TILE_LENGTH = 10;
     TOTAL_TILES = 256;
     TILE_SPRITES = 12;
 }
@@ -22,6 +22,11 @@ void Level::LoadLevel()
 
     //Open the map
     std::ifstream lvl( "levels/test.lvl" );
+
+    if(!lvl)
+    {
+        std::cout << "level loading failed";
+    }
 
 
     //Initialize the tiles
@@ -36,6 +41,7 @@ void Level::LoadLevel()
         //If there was a problem in reading the map
         if( lvl.fail() == true )
         {
+            std::cout << "level reading failed";
             //Stop loading map
             lvl.close();
         }
@@ -63,7 +69,7 @@ void Level::LoadLevel()
             x = 0;
 
             //Move to the next row
-            y += TILE_HEIGHT;
+            y += TILE_LENGTH;
         }
     }
 
@@ -71,18 +77,42 @@ void Level::LoadLevel()
     lvl.close();
 }
 
-void Level::DrawLevel(irr::scene::ISceneManager* smgr)
+void Level::DrawLevel(irr::IrrlichtDevice* device)
 {
-    irr::scene::ISceneNode* node;
+    irr::scene::ISceneManager* smgr = device->getSceneManager();
+    irr::scene::ISceneNode* tilenode;
+    float tileheight;
 
     for(int i=0; i<256; i++)
     {
 
-            std::cout <<std::endl<<"drawing tile:"<<i;
-            node = smgr->addCubeSceneNode();
-            node->setPosition(tiles[i]->position);
-            node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 
+        tilenode = smgr->addCubeSceneNode(10.f);
+        tilenode->setPosition(tiles[i]->position);
+        tilenode->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+
+        switch (tiles[i]->type)
+        {
+        case TILE_FLOOR:
+            tileheight = 1.f;
+            break;
+        case TILE_HEIGHT_1:
+        tileheight = 2.f;
+            break;
+        case TILE_HEIGHT_2:
+        tileheight = 10.f;
+            break;
+        case TILE_RAMP_TOP:
+        case TILE_RAMP_RIGHT:
+        case TILE_RAMP_BOTTOM:
+        case TILE_RAMP_LEFT:
+        default:
+            break;
+        }
+        std::cout <<std::endl<<"drawing tile "<<i+1;
+        std::cout << " at height "<< tileheight;
+        tilenode->setScale(irr::core::vector3df(1.f,tileheight,1.f));
+        tilenode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/wall.png"));
 
     }
 }
@@ -91,3 +121,4 @@ Level::~Level()
 {
     //dtor
 }
+

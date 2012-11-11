@@ -3,6 +3,7 @@
 #include <SDL/SDL_image.h>
 #include <string>
 #include <fstream>
+#include <iostream>
 
 //Screen attributes
 const int SCREEN_WIDTH = 640;
@@ -529,6 +530,7 @@ void save_tiles( Tile *tiles[] )
         lvl << tiles[ t ]->get_type() << " ";
     }
 
+    std::cout << "Level saved at ../levels/test.lvl";
     //Close the file
     lvl.close();
 }

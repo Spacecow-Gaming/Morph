@@ -45,13 +45,16 @@
 			<Add library="Xext" />
 			<Add library="X11" />
 		</Linker>
+		<Unit filename="include/EventReceiver.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Level.h" />
 		<Unit filename="include/Player.h" />
+		<Unit filename="include/Tile.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Level.cpp" />
 		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/Tile.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

@@ -26,7 +26,7 @@ class Level
 public:
     Level();
     void LoadLevel();
-    void DrawLevel(irr::scene::ISceneManager*);
+    void DrawLevel(irr::IrrlichtDevice*);
     virtual ~Level();
 
     //The array of tiles
@@ -35,11 +35,11 @@ protected:
 private:
     //The dimensions of the level
     int LEVEL_WIDTH;
-    int LEVEL_HEIGHT;
+    int LEVEL_LENGTH;
 
     //Tile constants
     int TILE_WIDTH;
-    int TILE_HEIGHT;
+    int TILE_LENGTH;
     int TOTAL_TILES;
     int TILE_SPRITES;
 
