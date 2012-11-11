@@ -46,15 +46,15 @@ void Game::StartGame()
     level.LoadLevel();
     level.DrawLevel(device);
 
-    camera->setPosition(core::vector3df(0.f,50.f,0.f));
-    camera->setTarget(core::vector3df(0.f,0.f,0.f));
+    camera->setPosition(core::vector3df(80.f,50.f,80.f));
+    camera->setTarget(core::vector3df(0.f,50.f,0.f));
 
     int lastFPS = -1;
 
 
     //Creates light, sets properties
     scene::ILightSceneNode* lightnode = smgr->addLightSceneNode();
-    lightnode->setPosition(core::vector3df(80.f,80.f,80.f));
+    lightnode->setPosition(core::vector3df(160.f,80.f,160.f));
     lightnode->setRadius(3200.f);
     lightnode->enableCastShadow(false);
 
