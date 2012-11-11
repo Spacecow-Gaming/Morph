@@ -16,49 +16,34 @@ Level::Level()
 
 void Level::LoadLevel()
 {
-    std::cout<<"loadlevel called";
-    //The tile offsets
+    std::cout<<"Loading level...";
     int x = 0, y = 0;
-
-    //Open the map
     std::ifstream lvl( "levels/test.lvl" );
 
     if(!lvl)
     {
-        std::cout << "level loading failed";
+        std::cout << "Level loading failed.";
     }
 
-
-    //Initialize the tiles
     for( int t = 0; t < TOTAL_TILES; t++ )
     {
-        //Determines what kind of tile will be made
         int tileType = -1;
-
-        //Read tile from map file
         lvl >> tileType;
-
-        //If there was a problem in reading the map
         if( lvl.fail() == true )
         {
-            std::cout << "level reading failed";
-            //Stop loading map
+            std::cout << "Level reading failed.";
             lvl.close();
         }
-
         //If the number is a valid tile number
         if( ( tileType >= 0 ) && ( tileType < TILE_SPRITES ) )
         {
-            //Create a tile on the heap
             tiles[ t ] = new Tile( x, y, tileType );
         }
         //If we don't recognize the tile type
         else
         {
-            //Stop loading map
             lvl.close();
         }
-
         //Move to next tile spot
         x += TILE_WIDTH;
 
@@ -67,13 +52,10 @@ void Level::LoadLevel()
         {
             //Move back
             x = 0;
-
             //Move to the next row
             y += TILE_LENGTH;
         }
     }
-
-    //Close the file
     lvl.close();
 }
 
@@ -89,18 +71,21 @@ void Level::DrawLevel(irr::IrrlichtDevice* device)
 
         tilenode = smgr->addCubeSceneNode(10.f);
         tilenode->setPosition(tiles[i]->position);
-        tilenode->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+        tilenode->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 
         switch (tiles[i]->type)
         {
         case TILE_FLOOR:
             tileheight = 1.f;
+            tilenode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/floor.png"));
             break;
         case TILE_HEIGHT_1:
-        tileheight = 2.f;
+            tileheight = 1.f;
+            tilenode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/red.png"));
             break;
         case TILE_HEIGHT_2:
-        tileheight = 10.f;
+            tileheight = 4.f;
+            tilenode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/wall.png"));
             break;
         case TILE_RAMP_TOP:
         case TILE_RAMP_RIGHT:
@@ -112,7 +97,7 @@ void Level::DrawLevel(irr::IrrlichtDevice* device)
         std::cout <<std::endl<<"drawing tile "<<i+1;
         std::cout << " at height "<< tileheight;
         tilenode->setScale(irr::core::vector3df(1.f,tileheight,1.f));
-        tilenode->setMaterialTexture(0, device->getVideoDriver()->getTexture("media/wall.png"));
+
 
     }
 }
