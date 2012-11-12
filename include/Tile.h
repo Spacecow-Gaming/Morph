@@ -3,6 +3,8 @@
 
 #include <irrlicht/irrlicht.h>
 
+using namespace irr;
+
 class Tile
 {
 public:
@@ -13,7 +15,7 @@ public:
     int type;
 
     //Position
-    irr::core::vector3df position;
+    core::vector3df position;
 protected:
 private:
 };

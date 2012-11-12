@@ -3,6 +3,7 @@
 
 Level::Level()
 {
+    std::cout << "Level constructor called";
     //The dimensions of the level
     LEVEL_WIDTH = 160;
     LEVEL_LENGTH = 160;

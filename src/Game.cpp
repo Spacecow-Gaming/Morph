@@ -15,13 +15,16 @@ Game::Game()
 
 void Game::InitGame()
 {
-    std::cout << "Game started";
+    std::cout << "Game started\n";
+
 
     //Creates the device (window) containing the game
     device = createDevice(video::EDT_OPENGL,                    //Sets driver to OpenGL
                                           core::dimension2d<u32>(1280, 720),    //Sets window dimensions
                                           16,                                   //Sets colour depth in bits
-                                          false, false, true, 0);              //Sets Vsync and some other things to false
+                                          false, false, true, NULL);              //Sets Vsync and some other things to false
+
+
 
     std::cout << "Device created";
     //Creates pointers to device's members
@@ -58,7 +61,7 @@ void Game::InitGame()
     //Render loop
     while(device->run())
     {
-        //Sets scene default colour to a dark grey
+        //Sets scene default colour to blue
         driver->beginScene(true, true, video::SColor(255,32,64,128));
         smgr->drawAll();
         guienv->drawAll();

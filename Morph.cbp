@@ -7,13 +7,12 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Linux">
-				<Option output="bin\Linux\Morph" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Linux/Morph" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="irrlicht-1.8\include" />
 				</Compiler>
 				<Linker>
 					<Add library="Irrlicht" />
@@ -21,14 +20,13 @@
 					<Add library="Xxf86vm" />
 					<Add library="Xext" />
 					<Add library="X11" />
-					<Add directory="\usr\X11R6\lib$(LIBSELECT)" />
-					<Add directory="\irrlicht-1.8\lib\Linux" />
+					<Add directory="/usr/X11R6/lib$(LIBSELECT)" />
 				</Linker>
 			</Target>
 			<Target title="Win32">
 				<Option platforms="Windows;" />
-				<Option output="bin\Win32\Morph" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="bin/Win32/Morph" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -51,16 +49,16 @@
 			<Add library="Xext" />
 			<Add library="X11" />
 		</Linker>
-		<Unit filename="include\EventReceiver.h" />
-		<Unit filename="include\Game.h" />
-		<Unit filename="include\Level.h" />
-		<Unit filename="include\Player.h" />
-		<Unit filename="include\Tile.h" />
+		<Unit filename="include/EventReceiver.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/Level.h" />
+		<Unit filename="include/Player.h" />
+		<Unit filename="include/Tile.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src\Game.cpp" />
-		<Unit filename="src\Level.cpp" />
-		<Unit filename="src\Player.cpp" />
-		<Unit filename="src\Tile.cpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Level.cpp" />
+		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/Tile.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
