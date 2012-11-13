@@ -25,9 +25,9 @@ const int TILE_SPRITES = 12;
 
 //Tile floor and wall sprites
 const int TILE_FLOOR = 0;
-const int TILE_HEIGHT_1 = 1;
-const int TILE_HEIGHT_2 = 2;
-const int TILE_CENTER = 3;
+const int TILE_RED = 1;
+const int TILE_WALL = 2;
+const int TILE_CENTER = 101;
 const int TILE_RAMP_TOP = 4;
 const int TILE_TOPRIGHT = 5;
 const int TILE_RAMP_RIGHT = 6;
@@ -36,6 +36,7 @@ const int TILE_RAMP_BOTTOM = 8;
 const int TILE_BOTTOMLEFT = 9;
 const int TILE_RAMP_LEFT = 10;
 const int TILE_TOPLEFT = 11;
+const int TILE_AIR = 3;
 
 
 //The surfaces
@@ -54,14 +55,14 @@ SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 //The tile
 class Tile
 {
-    private:
+private:
     //The attributes of the tile
     SDL_Rect box;
 
     //The tile type
     int type;
 
-    public:
+public:
     //Initializes the variables
     Tile( int x, int y, int tileType );
 
@@ -78,7 +79,7 @@ class Tile
 //The timer
 class Timer
 {
-    private:
+private:
     //The clock time when the timer started
     int startTicks;
 
@@ -89,7 +90,7 @@ class Timer
     bool paused;
     bool started;
 
-    public:
+public:
     //Initializes variables
     Timer();
 
@@ -231,7 +232,6 @@ bool load_files()
     {
         return false;
     }
-
     //If everything loaded fine
     return true;
 }
@@ -246,62 +246,47 @@ void clean_up( Tile *tiles[] )
     {
         delete tiles[ t ];
     }
-
-    //Quit SDL
-    SDL_Quit();
 }
 
 void show_type( int tileType )
 {
     switch( tileType )
     {
-        case TILE_FLOOR:
+    case TILE_FLOOR:
         SDL_WM_SetCaption( "Level Editor. Current Tile: Floor", NULL );
         break;
 
-        case TILE_HEIGHT_1:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: Wall Height 1", NULL );
+    case TILE_RED:
+        SDL_WM_SetCaption( "Level Editor. Current Tile: Red", NULL );
         break;
 
-        case TILE_HEIGHT_2:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: Wall Height 2", NULL );
+    case TILE_WALL:
+        SDL_WM_SetCaption( "Level Editor. Current Tile: Wall", NULL );
         break;
 
-        case TILE_CENTER:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: DONT USE", NULL );
-        break;
-
-        case TILE_RAMP_TOP:
+    case TILE_RAMP_TOP:
         SDL_WM_SetCaption( "Level Editor. Current Tile: Top-facing ramp", NULL );
         break;
 
-        case TILE_TOPRIGHT:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: DONT USE", NULL );
-        break;
-
-        case TILE_RAMP_RIGHT:
+    case TILE_RAMP_RIGHT:
         SDL_WM_SetCaption( "Level Editor. Current Tile: Right-facing ramp", NULL );
         break;
 
-        case TILE_BOTTOMRIGHT:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: DONT USE", NULL );
-        break;
-
-        case TILE_RAMP_BOTTOM:
+    case TILE_RAMP_BOTTOM:
         SDL_WM_SetCaption( "Level Editor. Current Tile: Bottom-facing ramp", NULL );
         break;
 
-        case TILE_BOTTOMLEFT:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: DONT USE", NULL );
-        break;
-
-        case TILE_RAMP_LEFT:
+    case TILE_RAMP_LEFT:
         SDL_WM_SetCaption( "Level Editor. Current Tile: Left-facing ramp", NULL );
         break;
 
-        case TILE_TOPLEFT:
-        SDL_WM_SetCaption( "Level Editor. Current Tile: DONT USE", NULL );
+    case TILE_AIR:
+        SDL_WM_SetCaption( "Level Editor. Current Tile: Empty", NULL );
         break;
+
+    default:
+        break;
+
     };
 }
 
@@ -394,15 +379,15 @@ void clip_tiles()
     clips[ TILE_FLOOR ].w = TILE_WIDTH;
     clips[ TILE_FLOOR ].h = TILE_HEIGHT;
 
-    clips[ TILE_HEIGHT_1 ].x = 0;
-    clips[ TILE_HEIGHT_1 ].y = 80;
-    clips[ TILE_HEIGHT_1 ].w = TILE_WIDTH;
-    clips[ TILE_HEIGHT_1 ].h = TILE_HEIGHT;
+    clips[ TILE_RED ].x = 0;
+    clips[ TILE_RED ].y = 80;
+    clips[ TILE_RED ].w = TILE_WIDTH;
+    clips[ TILE_RED ].h = TILE_HEIGHT;
 
-    clips[ TILE_HEIGHT_2 ].x = 0;
-    clips[ TILE_HEIGHT_2 ].y = 160;
-    clips[ TILE_HEIGHT_2 ].w = TILE_WIDTH;
-    clips[ TILE_HEIGHT_2 ].h = TILE_HEIGHT;
+    clips[ TILE_WALL ].x = 0;
+    clips[ TILE_WALL ].y = 160;
+    clips[ TILE_WALL ].w = TILE_WIDTH;
+    clips[ TILE_WALL ].h = TILE_HEIGHT;
 
 
 
@@ -411,6 +396,10 @@ void clip_tiles()
     clips[ TILE_RAMP_LEFT ].w = TILE_WIDTH;
     clips[ TILE_RAMP_LEFT ].h = TILE_HEIGHT;
 
+    clips[ TILE_AIR ].x = 80;
+    clips[ TILE_AIR ].y = 0;
+    clips[ TILE_AIR ].w = TILE_WIDTH;
+    clips[ TILE_AIR ].h = TILE_HEIGHT;
 
 
     clips[ TILE_RAMP_TOP ].x = 160;
@@ -434,94 +423,41 @@ void clip_tiles()
 
 }
 
-bool set_tiles( Tile *tiles[] )
+bool set_tiles( Tile *tiles[])
 {
     //The tile offsets
     int x = 0, y = 0;
 
-    //Open the map
-    std::ifstream lvl( "../levels/test.lvl" );
 
-    //If the map couldn't be loaded
-    if( lvl == NULL )
+    //Initialize the tiles
+    for( int t = 0; t < TOTAL_TILES; t++ )
     {
-        //Initialize the tiles
-        for( int t = 0; t < TOTAL_TILES; t++ )
+        //Put a floor tile
+        tiles[ t ] = new Tile( x, y, TILE_AIR);
+
+        //Move to next tile spot
+        x += TILE_WIDTH;
+
+        //If we've gone too far
+        if( x >= LEVEL_WIDTH )
         {
-            //Put a floor tile
-            tiles[ t ] = new Tile( x, y, t % ( TILE_HEIGHT_2 + 1 ) );
+            //Move back
+            x = 0;
 
-            //Move to next tile spot
-            x += TILE_WIDTH;
-
-            //If we've gone too far
-            if( x >= LEVEL_WIDTH )
-            {
-                //Move back
-                x = 0;
-
-                //Move to the next row
-                y += TILE_HEIGHT;
-            }
+            //Move to the next row
+            y += TILE_HEIGHT;
         }
     }
-    else
-    {
-        //Initialize the tiles
-        for( int t = 0; t < TOTAL_TILES; t++ )
-        {
-            //Determines what kind of tile will be made
-            int tileType = -1;
 
-            //Read tile from map file
-            lvl >> tileType;
 
-            //If there was a problem in reading the map
-            if( lvl.fail() == true )
-            {
-                //Stop loading map
-                lvl.close();
-                return false;
-            }
-
-            //If the number is a valid tile number
-            if( ( tileType >= 0 ) && ( tileType < TILE_SPRITES ) )
-            {
-                tiles[ t ] = new Tile( x, y, tileType );
-            }
-            //If we don't recognize the tile type
-            else
-            {
-                //Stop loading map
-                lvl.close();
-                return false;
-            }
-
-            //Move to next tile spot
-            x += TILE_WIDTH;
-
-            //If we've gone too far
-            if( x >= LEVEL_WIDTH )
-            {
-                //Move back
-                x = 0;
-
-                //Move to the next row
-                y += TILE_HEIGHT;
-            }
-        }
-
-        //Close the file
-        lvl.close();
-    }
 
     return true;
 }
 
-void save_tiles( Tile *tiles[] )
+void save_tiles( Tile *tiles[], std::string filename )
 {
     //Open the map
-    std::ofstream lvl( "../levels/test.lvl" );
+    std::ofstream lvl(filename.c_str());
 
     //Go through the tiles
     for( int t = 0; t < TOTAL_TILES; t++ )
@@ -530,7 +466,7 @@ void save_tiles( Tile *tiles[] )
         lvl << tiles[ t ]->get_type() << " ";
     }
 
-    std::cout << "Level saved at ../levels/test.lvl";
+    std::cout << "Level saved at "<<filename;
     //Close the file
     lvl.close();
 }
@@ -689,8 +625,13 @@ int main( int argc, char* args[] )
     //Clip the tile sheet
     clip_tiles();
 
+    //std::string openfilename;
+
+    // std::cout << "Enter filename to open:";
+    // std::cin >> openfilename;
+
     //Set the tiles
-    if( set_tiles( tiles ) == false )
+    if( set_tiles( tiles) == false )
     {
         return 1;
     }
@@ -710,35 +651,39 @@ int main( int argc, char* args[] )
                 //Changes tile type based on number key pressed
                 switch(event.key.keysym.sym)
                 {
-                    case SDLK_1:
+                case SDLK_1:
                     currentType = TILE_FLOOR;
                     break;
 
-                    case SDLK_2:
-                    currentType = TILE_HEIGHT_1;
+                case SDLK_2:
+                    currentType = TILE_RED;
                     break;
 
-                    case SDLK_3:
-                    currentType = TILE_HEIGHT_2;
+                case SDLK_3:
+                    currentType = TILE_WALL;
                     break;
 
-                    case SDLK_4:
+                case SDLK_4:
                     currentType = TILE_RAMP_BOTTOM;
                     break;
 
-                    case SDLK_5:
+                case SDLK_5:
                     currentType = TILE_RAMP_RIGHT;
                     break;
 
-                    case SDLK_6:
+                case SDLK_6:
                     currentType = TILE_RAMP_TOP;
                     break;
 
-                    case SDLK_7:
+                case SDLK_7:
                     currentType = TILE_RAMP_LEFT;
                     break;
 
-                    default:
+                case SDLK_0:
+                    currentType = TILE_AIR;
+                    break;
+
+                default:
                     break;
                 }
                 show_type( currentType );
@@ -784,8 +729,15 @@ int main( int argc, char* args[] )
         }
     }
 
+    SDL_Quit();
+
+    std::string savefilename;
+
+    std::cout << "Enter filename to save as:";
+    std::cin >> savefilename;
+
     //Save the tile map
-    save_tiles( tiles );
+    save_tiles( tiles, savefilename);
 
     //Clean up
     clean_up( tiles );

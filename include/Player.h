@@ -23,6 +23,9 @@ private:
 
     //Direction vectors
     core::vector3df forwardVector, rightVector, upVector;
+
+    //Speed variable
+    float speed;
 };
 
 #endif // PLAYER_H

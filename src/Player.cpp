@@ -16,6 +16,9 @@ Player::Player(IrrlichtDevice* indevice)
     camera->setPosition(core::vector3df(80.f,50.f,80.f));
     camera->setTarget(core::vector3df(0.f,50.f,0.f));
 
+    //Sets speed
+    speed = 5.f;
+
 }
 
 void Player::HandleKeys()
@@ -25,22 +28,22 @@ void Player::HandleKeys()
     cameraPos = camera->getPosition();
 
     if(receiver->IsKeyDown( irr::KEY_KEY_W))
-        cameraPos+=5.f*forwardVector;
+        cameraPos+=speed*forwardVector;
 
     if(receiver->IsKeyDown( irr::KEY_KEY_S))
-        cameraPos-=5.f*forwardVector;
+        cameraPos-=speed*forwardVector;
 
     if(receiver->IsKeyDown( irr::KEY_KEY_A))
-        cameraPos-=5.f*rightVector;
+        cameraPos-=speed*rightVector;
 
     if(receiver->IsKeyDown( irr::KEY_KEY_D))
-        cameraPos+=5.f*rightVector;
+        cameraPos+=speed*rightVector;
 
     if(receiver->IsKeyDown( irr::KEY_SPACE))
-        cameraPos+=5.f*upVector;
+        cameraPos+=speed*upVector;
 
     if(receiver->IsKeyDown( irr::KEY_KEY_C))
-        cameraPos-=5.f*upVector;
+        cameraPos-=speed*upVector;
 }
 
 void Player::ComputeVectors()

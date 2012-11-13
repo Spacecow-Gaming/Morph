@@ -13,24 +13,32 @@ enum
 {
     //Tile floor and wall sprites
     TILE_FLOOR,
-    TILE_HEIGHT_1,
-    TILE_HEIGHT_2,
-    TILE_RAMP_TOP,
-    TILE_RAMP_RIGHT,
-    TILE_RAMP_BOTTOM,
-    TILE_RAMP_LEFT
+    TILE_RED,
+    TILE_WALL,
+    TILE_RAMP_TOP = 4,
+    TILE_RAMP_RIGHT = 6,
+    TILE_RAMP_BOTTOM = 8,
+    TILE_RAMP_LEFT = 10,
+    AIR = 3
+};
+
+enum SHAPE
+{
+    CUBE,
+    RAMP
 };
 
 class Level
 {
 public:
     Level();
-    void LoadLevel();
+    void LoadLevel(int, std::string);
     void DrawLevel(irr::IrrlichtDevice*);
+    scene::SMesh* CustomMesh(video::SColor incolor, SHAPE shape);
     virtual ~Level();
 
-    //The array of tiles
-    Tile* tiles[256];
+    //The array of arrays of tiles - each level of the level
+    Tile* tiles[10][256];
 protected:
 private:
     //The dimensions of the level

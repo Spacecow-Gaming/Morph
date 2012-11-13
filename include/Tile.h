@@ -9,7 +9,7 @@ class Tile
 {
 public:
     //Initializes the variables
-    Tile( int x, int y, int tileType );
+    Tile( int x, int y, int z, int tileType );
 
     //The tile type
     int type;
